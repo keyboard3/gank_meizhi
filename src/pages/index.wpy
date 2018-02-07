@@ -1,52 +1,58 @@
 <style lang="less">
+
 </style>
 
 <template>
-  <view class="container">
-    <view>
-      <image src="{{ image.imageUrl }}" background-size="cover" />
-      <view>{{image.text}}</view>
-    </view>
+  <view>
+    <repeat for="{{results}}" key="index" index="index" item="item">
+      <imageitem :id="item._id" :title="item.desc" :url="item.imageUrl" @clickFn.user="enterDetail"></imageitem>
+    </repeat>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
-  import Panel from '@/components/panel' // alias example
-  import List from '../components/list' // aliasFields example
-  import Group from '../components/group'
+  import ImageItem from '../components/imageitem' // alias example
   import Toast from 'wepy-com-toast'
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: '妹纸&gank.io'
     }
     components = {
-      panel: Panel,
-      list: List,
-      group: Group,
+      imageitem: ImageItem,
       toast: Toast
     }
     data = {
-      image: {
-        imageUrl: "http://img.gank.io/e0d29181-282e-4465-9965-1da81e0557d9",
-        title:"插件化理解与实现 —— 加载 Activity「类加载篇」"
-      }
+      results: []
     }
     methods = {
+      enterDetail(id, evt) {
+        var item = this.results.find((value, index, arr) => {
+          return Object.is(id, value._id);
+        });
+        this.$navigate("gankdetail",item);
+      }
     }
-    events = {
-    }
-    onLoad() {
-      this.$parent.getUserInfo((userInfo)=>{
-        this.userInfo=userInfo;
-         console.log(this)
+    events = {}
+    async onLoad() {
+      this.$parent.getUserInfo((userInfo) => {
+        this.userInfo = userInfo;
         this.$apply();
       });
-      wepy.request('http://gank.io/api/day/2015/08/07').then((result) => 
-        //this.results={"name":123};
-        
-        console.log("this")
-      );
+      await wepy.request('http://gank.io/api/data/%E4%BC%91%E6%81%AF%E8%A7%86%E9%A2%91/10/1').then((result) => {
+        this.results = result.data.results;
+        //this.$apply();
+        console.log("第一个请求完毕");
+      });
+      await wepy.request('http://gank.io/api/data/%E7%A6%8F%E5%88%A9/10/1').then((result) => {
+        console.log("len:" + this.results.length);
+        this.results.forEach((currentValue, index, arr) => {
+          currentValue.imageUrl = result.data.results[index].url;
+        });
+        this.$apply();
+        console.log(this.results);
+        console.log("第二个请求完毕");
+      });
     }
   }
 </script>

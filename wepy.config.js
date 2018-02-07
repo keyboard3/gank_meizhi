@@ -28,6 +28,7 @@ module.exports = {
         'env'
       ],
       plugins: [
+        "syntax-export-extensions",
         'transform-class-properties',
         'transform-decorators-legacy',
         'transform-object-rest-spread',

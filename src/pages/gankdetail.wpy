@@ -1,0 +1,30 @@
+<style lang="less">
+    .img {
+        width: 500rpx;
+        height: 500rpx;
+    }
+</style>
+
+<template>
+    <view>
+        <view>gank 详情</view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    export default class GankDetail extends wepy.page {
+        config = {
+            navigationBarTitleText: '详情'
+        }
+        onLoad(params, data) {
+            console.log(params);
+            console.log(data);
+        }
+        data = {
+
+        }
+        events = {}
+        methods = {}
+    }
+</script>

@@ -1,0 +1,37 @@
+<style lang="less">
+.img{
+    width:500rpx;
+    height:500rpx;
+}
+</style>
+
+<template>
+    <view @tap="clickFn('{{id}}')">
+        <image class="img" src="{{url}}" background-size="cover"></image>
+        <view>{{title}}</view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    export default class ImageItem extends wepy.component {
+        props = {
+            id: String,
+            url:String,
+            title: {
+                type: String,
+                default: "暂无标题"
+            }
+        }
+        data = {
+            name:"nihao"
+        }
+        events = {   
+        }
+        methods = {
+            clickFn(id){
+                this.$emit('clickFn',id)
+            }
+        }
+    }
+</script>
