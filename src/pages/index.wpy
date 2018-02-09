@@ -1,9 +1,15 @@
 <style lang="less">
-
+.container{
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 5px;
+  background: #F9F9F9;
+}
 </style>
 
 <template>
-  <view>
+  <view class="container">
     <repeat for="{{results}}" key="index" index="index" item="item">
       <imageitem :id="item._id" :title="item.desc" :url="item.imageUrl" @clickFn.user="enterDetail"></imageitem>
     </repeat>
@@ -13,14 +19,15 @@
 <script>
   import wepy from 'wepy'
   import ImageItem from '../components/imageitem' // alias example
-  import Toast from 'wepy-com-toast'
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: '妹纸&gank.io'
+      navigationBarTitleText: '妹纸&gank.io',
+      navigationBarBackgroundColor:"#231614",
+      navigationBarTextStyle:"white",
+      backgroudTextStyle:"light"
     }
     components = {
       imageitem: ImageItem,
-      toast: Toast
     }
     data = {
       results: []
@@ -41,13 +48,12 @@
       });
       await wepy.request('http://gank.io/api/data/%E4%BC%91%E6%81%AF%E8%A7%86%E9%A2%91/10/1').then((result) => {
         this.results = result.data.results;
-        //this.$apply();
-        console.log("第一个请求完毕");
       });
       await wepy.request('http://gank.io/api/data/%E7%A6%8F%E5%88%A9/10/1').then((result) => {
         console.log("len:" + this.results.length);
         this.results.forEach((currentValue, index, arr) => {
           currentValue.imageUrl = result.data.results[index].url;
+          currentValue.desc=currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-")+1,5)+currentValue.desc;
         });
         this.$apply();
         console.log(this.results);

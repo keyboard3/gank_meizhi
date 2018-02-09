@@ -15,14 +15,16 @@
     import wepy from 'wepy'
     export default class GankDetail extends wepy.page {
         config = {
-            navigationBarTitleText: '详情'
+            navigationBarTitleText: '详情',
+            navigationBarBackgroundColor: "#231614",
+            navigationBarTextStyle: "white",
+            backgroudTextStyle: "light"
         }
         onLoad(params, data) {
             console.log(params);
             console.log(data);
         }
         data = {
-
         }
         events = {}
         methods = {}

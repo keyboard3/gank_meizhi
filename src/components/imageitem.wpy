@@ -1,14 +1,29 @@
 <style lang="less">
-.img{
-    width:500rpx;
-    height:500rpx;
-}
+    image {
+        width: 195px;
+        height: 240px;
+        border-radius: 4px 4px 0px 0px;
+    }
+    .box {
+        width: 195px;
+        margin: 1px;
+        background-color: #fff;
+        border-radius: 4px;
+        border-style: solid;
+        border-width: 1px;
+        border-color: #CECECE;
+    }
+    .box text {
+        color: #626262;
+        font-size: 14px;
+        margin: 5px;
+    }
 </style>
 
 <template>
-    <view @tap="clickFn('{{id}}')">
-        <image class="img" src="{{url}}" background-size="cover"></image>
-        <view>{{title}}</view>
+    <view class="box" @tap="clickFn('{{id}}')">
+        <image src="{{url}}" background-size="cover"></image>
+        <text>{{title}}</text>
     </view>
 </template>
 
@@ -17,20 +32,19 @@
     export default class ImageItem extends wepy.component {
         props = {
             id: String,
-            url:String,
+            url: String,
             title: {
                 type: String,
                 default: "暂无标题"
             }
         }
         data = {
-            name:"nihao"
+            name: "nihao"
         }
-        events = {   
-        }
+        events = {}
         methods = {
-            clickFn(id){
-                this.$emit('clickFn',id)
+            clickFn(id) {
+                this.$emit('clickFn', id)
             }
         }
     }
