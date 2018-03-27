@@ -74,7 +74,9 @@
         var item = this.results.find((value, index, arr) => {
           return Object.is(id, value._id);
         });
-        this.$navigate("gankdetail",item);
+        var date=item.publishedAt.substring(0,10).replace(/-/g,'/');
+        var url=`http://gank.io/${date}`;
+        this.$navigate("gankdetail",{url:url,date:date});
       }
     }
     events = {}

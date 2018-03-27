@@ -6,9 +6,7 @@
 </style>
 
 <template>
-    <view>
-        <view>gank 详情</view>
-    </view>
+    <web-view src="{{url}}"></web-view>
 </template>
 
 <script>
@@ -21,10 +19,14 @@
             backgroudTextStyle: "light"
         }
         onLoad(params, data) {
-            console.log(params);
-            console.log(data);
+            this.url=params.url;
+            wx.setNavigationBarTitle({
+                title: params.date
+            })
+            this.$apply();
         }
         data = {
+            url:''
         }
         events = {}
         methods = {}
