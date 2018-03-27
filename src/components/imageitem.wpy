@@ -13,7 +13,7 @@
         border-width: 1px;
         border-color: #CECECE;
     }
-    .box text {
+    .box view {
         color: #626262;
         font-size: 14px;
         margin: 5px;
@@ -22,8 +22,8 @@
 
 <template>
     <view class="box" @tap="clickFn('{{id}}')">
-        <image src="{{url}}" background-size="cover"></image>
-        <text>{{title}}</text>
+        <image mode="aspectFill" src="{{url}}" background-size="cover"></image>
+        <view>{{title}}</view>
     </view>
 </template>
 
