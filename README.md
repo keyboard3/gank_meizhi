@@ -6,9 +6,11 @@ wepy框架实现的仿drakeet的[Meizhi](https://github.com/drakeet/Meizhi)
 * image组件事件传递
  
 ## 截图
-<div style="display:inline;"><img src="/images/index.png" width="500"></div>
-<div style="display:inline;"><img src="/images/image.png" width="500"></div>
-<div style="display:inline;"><img src="/images/detail.png" width="500"></div>
+<div style="display:flex;flex-flow:row wrap;">
+    <img src="/images/index.png" width="400">
+    <img src="/images/image.png" width="400">
+    <img src="/images/detail.png" width="400">
+</div>
 
 
 ## 关于我
