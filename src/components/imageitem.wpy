@@ -21,9 +21,9 @@
 </style>
 
 <template>
-    <view class="box" @tap="clickFn('{{id}}')">
-        <image mode="aspectFill" src="{{url}}" background-size="cover"></image>
-        <view>{{title}}</view>
+    <view class="box" >
+        <image @tap="clickImage('{{url}}')" mode="aspectFill" src="{{url}}" background-size="cover"></image>
+        <view @tap="clickFn('{{id}}')">{{title}}</view>
     </view>
 </template>
 
@@ -45,6 +45,9 @@
         methods = {
             clickFn(id) {
                 this.$emit('clickFn', id)
+            },
+            clickImage(url){
+                this.$emit('clickImage',url);
             }
         }
     }
