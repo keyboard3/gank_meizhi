@@ -1,17 +1,20 @@
 # gank_meizhi
-wepy框架实现的仿drakeet的[Meizhi](https://github.com/drakeet/Meizhi)
+仿drakeet的[Meizhi](https://github.com/drakeet/Meizhi)
+本案例使用各种移动解决方案实现该应用
 
-## 特色
-* flex实现瀑布流
-* image组件事件传递
  
-## 截图
+## 微信小程序
 <div style="display:flex;flex-flow:row wrap;">
-    <img src="/images/index.png" width="400">
-    <img src="/images/image.png" width="400">
-    <img src="/images/detail.png" width="400">
+    <img src="/weixin/images/index.png" width="400">
+    <img src="/weixin/images/preview.png" width="400">
+    <img src="/weixin/images/detail.png" width="400">
 </div>
-
+## ReactNative
+<div style="display:flex;flex-flow:row wrap;">
+    <img src="/reactNative/weixin/images/index.png" width="400">
+    <img src="/reactNative/images/preview.png" width="400">
+    <img src="/reactNative/images/detail.png" width="400">
+</div>
 
 ## 关于我
 

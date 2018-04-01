@@ -97,8 +97,7 @@
     async getData(page,callback){
       if(this.loadEnd==1) return;
       this.loadEnd=1;
-      var url1='http://gank.io/api/data/%E4%BC%91%E6%81%AF%E8%A7%86%E9%A2%91/10/'+page;
-      var url2='http://gank.io/api/data/%E7%A6%8F%E5%88%A9/10/'+page;
+      var url='http://gank.io/api/data/休息视频/10/'+page;
       let results=[];
       await wepy.request(url1).then((result) => {
         console.log(decodeURIComponent(url1),result);
@@ -110,6 +109,7 @@
       }).then(()=>{
         if(callback!=null) callback.call();
       });
+      url='http://gank.io/api/data/福利/10/'+page;
       await wepy.request(url2).then((result) => {
         console.log(decodeURIComponent(url2),result);
         if(result.statusCode==200){
