@@ -7,14 +7,14 @@
  
 ## 微信小程序
 
-<div style="display:flex;flex-flow:row wrap;">
+<div style="display:flex;">
     <img src="/weixin/images/home.png" style="flex:1">
     <img src="/weixin/images/preview.png" style="flex:1">
     <img src="/weixin/images/detail.png" style="flex:1">
 </div>
 
 ## ReactNative
-<div style="display:flex;flex-flow:row wrap;">
+<div style="display:flex;">
     <img src="/reactNative/images/home.png" style="flex:1">
     <img src="/reactNative/images/preview.png" style="flex:1">
     <img src="/reactNative/images/detail.png" style="flex:1">
