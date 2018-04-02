@@ -8,16 +8,16 @@
 ## 微信小程序
 
 <div style="display:flex;flex-flow:row wrap;">
-    <img src="/weixin/images/home.png" width="350">
-    <img src="/weixin/images/preview.png" width="350">
-    <img src="/weixin/images/detail.png" width="350">
+    <img src="/weixin/images/home.png" style="flex:1">
+    <img src="/weixin/images/preview.png" style="flex:1">
+    <img src="/weixin/images/detail.png" style="flex:1">
 </div>
 
 ## ReactNative
 <div style="display:flex;flex-flow:row wrap;">
-    <img src="/reactNative/images/home.png" width="350">
-    <img src="/reactNative/images/preview.png" width="350">
-    <img src="/reactNative/images/detail.png" width="350">
+    <img src="/reactNative/images/home.png" style="flex:1">
+    <img src="/reactNative/images/preview.png" style="flex:1">
+    <img src="/reactNative/images/detail.png" style="flex:1">
 </div>
 
 ## 关于我
