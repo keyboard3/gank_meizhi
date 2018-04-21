@@ -6,21 +6,21 @@ import {
 export default class App extends Component {
     constructor(){
         super();
-        this.state={url:''};
+        this.state = {url: ''};
     }
-    static navigationOptions = ({ navigation })=>{
+
+    static navigationOptions (navigation) {
         const { params } = navigation.state;
-        return {
-            title:params ? params.title:'详情'
-        };
+        return {title: params ? params.title: '详情'};
     }
-    componentDidMount(){
-        this.setState({ url: this.props.navigation.state.params.url});
+    componentDidMount() {
+        this.setState({ url: this.props.navigation.state.params.url });
     }
     render() {
         return (
             <WebView 
-                source={{ uri: this.state.url }}/>
+                source={{ uri: this.state.url }}
+            />
         );
     }
 }

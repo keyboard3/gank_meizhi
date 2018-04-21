@@ -10,25 +10,29 @@
 </template>
 
 <script>
-    import wepy from 'wepy'
-    export default class GankDetail extends wepy.page {
-        config = {
-            navigationBarTitleText: '详情',
-            navigationBarBackgroundColor: "#231614",
-            navigationBarTextStyle: "white",
-            backgroudTextStyle: "light"
-        }
-        onLoad(params, data) {
-            this.url=params.url;
-            wx.setNavigationBarTitle({
-                title: params.date
-            })
-            this.$apply();
-        }
-        data = {
-            url:''
-        }
-        events = {}
-        methods = {}
-    }
+  import wepy from 'wepy'
+  export default class GankDetail extends wepy.page {
+      config = {
+          navigationBarTitleText: '详情',
+          navigationBarBackgroundColor: "#231614",
+          navigationBarTextStyle: "white",
+          backgroudTextStyle: "light"
+      }
+      
+      data = {
+          url: ''
+      }
+
+      events = {}
+
+      methods = {}
+
+      onLoad(params, data) {
+          this.url = params.url;
+          wx.setNavigationBarTitle({
+              title: params.date
+          })
+          this.$apply();
+      }
+  }
 </script>
