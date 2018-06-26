@@ -107,45 +107,35 @@
       let results = [];
 
       let url='http://gank.io/api/data/休息视频/10/' + page;
-      await wepy.request(url1)
-                .then((result) => {
-                  console.log(decodeURIComponent(url1), result);
-                  if (result.statusCode == 200) {
-                    results = result.data.results;
-                  }else {
-                    wx.showToast({title:result.errMsg,icon:'none'});
-                  }
-                })
-                .then(()=>{
-                  if (callback!=null) callback.call();
-                });
+      await 
+      wepy.request(url1)
+          .then((result) => {
+            if (result.statusCode != 200) {wx.showToast({title:result.errMsg,icon:'none'});return;}
+            results = result.data.results;
+          })
+          .then(()=> if (callback!=null) callback.call(););
 
       url='http://gank.io/api/data/福利/10/' + page;
-      await wepy.request(url2)
-                .then((result) => {
-                  console.log(decodeURIComponent(url2), result);
-                  if (result.statusCode == 200) {
-                    results.forEach((currentValue, index, arr) => {
-                      currentValue.imageUrl = result.data.results[index].url;
-                      currentValue.desc = currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-") + 1, 5) 
-                                          + currentValue.desc;
-                    });
-                    console.log('result.lenght', this.results.length);
-                    if (this.results.length != 0 && page != 1) {
-                      currentPage++;
-                      this.results = this.results.concat(results);
-                    }else {
-                      this.results = results;
-                    }
-                  }else {
-                    wx.showToast({  title:result.errMsg, icon:'none'  });
-                  }
-                })
-                .then(() => {
-                  this.loadEnd = 0;
-                  if (callback != null) callback.call();
-                  this.$apply();
-                });
+      await 
+      wepy.request(url2)
+          .then((result) => {
+            if (result.statusCode != 200) {wx.showToast({  title:result.errMsg, icon:'none'  });return;}
+
+            results.forEach((currentValue, index, arr) => {
+              currentValue.imageUrl = result.data.results[index].url;
+              currentValue.desc = currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-") + 1, 5) 
+                                  + currentValue.desc;
+            });
+            if (this.results.length != 0 && page != 1) {
+              currentPage++;
+              this.results = this.results.concat(results);
+            }else this.results = results;
+          })
+          .then(() => {
+            this.loadEnd = 0;
+            if (callback != null) callback.call();
+            this.$apply();
+          });
     }
   }
 </script>

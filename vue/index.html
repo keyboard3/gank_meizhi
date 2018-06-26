@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>妹纸&gank.io</title>
+
+<style type="text/css">
+body{
+	margin:0;
+	background: #F5FCFF;
+}
+.vertical-layout {
+	display: flex;
+	flex-direction: column;
+}
+.horizontal-layout {
+	display: flex;
+	flex-direction: row;
+}
+.header {
+	width: 100%;
+	height: 50px;
+	background: #191111;
+	color: white;
+	font-size: 14px;
+	position: fixed;
+}
+.header.horizontal-layout {
+	align-items: center;
+	padding-left: 8px;
+	margin-top: -50px;
+}
+.container {
+	flex-wrap: wrap;
+	justify-content: space-between;
+	padding: 0px 2.5vw;
+	margin-top: 50px;
+}
+.image {
+	width: 45vw;
+}
+.title {
+	color: #626262;
+  font-size: 14px;
+  margin: 5px;
+}
+.box {
+	width: 45vw;
+  margin: 2px 0;
+  border-radius: 4px;
+  background-color: #fff;
+  border: 1px solid #CECECE;
+}
+</style>
+</head>
+
+<body>
+<div id="app">
+  <div class="header horizontal-layout">{{title}}</div>
+  <div class="horizontal-layout container">
+  	<div class="vertical-layout box" v-for="(item,index) in list" :key="index">
+  		<img class="image" :src="item.imageUrl">
+  		<div class="title">{{item.desc}}</div>
+  	</div>
+  </div>
+</div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+var app = new Vue({
+  el: '#app',
+  data: {
+    title: '妹纸&gank.io',
+    list: []
+  },
+  created() {
+  		this.loadData();
+  },
+  methods: {
+  	loadData(){
+  		let viedios;
+  		let url = 'http://gank.io/api/data/休息视频/10/1';
+  		axios.get(url)
+  			.then(result=>{
+  				if(result.status !=200) {alert(result.errMsg);return;}
+  				viedios = result.data.results;
+  				return axios.get('http://gank.io/api/data/福利/10/1');
+  			})
+  			.then(result=>{
+  				if(result.status !=200) {alert(result.errMsg);return;}
+  				 viedios.forEach((currentValue, index, arr) => {
+	            currentValue.imageUrl = result.data.results[index].url;
+	            currentValue.desc = currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-") + 1, 5) 
+	                                + currentValue.desc;
+	          });
+	          this.list = viedios;
+  			})
+  	}
+  }
+})
+</script>
+</html>
