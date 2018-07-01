@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta charset="UTF-8">
 <title>妹纸&gank.io</title>
-
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style type="text/css">
+[v-lock] {
+	display: none;
+}
 body{
-	margin:0;
+	margin: 0;
 	background: #F5FCFF;
 }
 .vertical-layout {
@@ -36,7 +39,7 @@ body{
 	padding: 0px 2.5vw;
 	margin-top: 50px;
 }
-.image {
+image {
 	width: 45vw;
 }
 .title {
@@ -55,11 +58,11 @@ body{
 </head>
 
 <body>
-<div id="app">
+<div id="app" v-lock>
   <div class="header horizontal-layout">{{title}}</div>
   <div class="horizontal-layout container">
-  	<div class="vertical-layout box" v-for="(item,index) in list" :key="index">
-  		<img class="image" :src="item.imageUrl">
+			<div class="vertical-layout box" v-for="(item,index) in list" :key="item.id">
+  		<img :src="item.imageUrl">
   		<div class="title">{{item.desc}}</div>
   	</div>
   </div>
@@ -68,7 +71,7 @@ body{
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script type="text/javascript">
+<script>
 var app = new Vue({
   el: '#app',
   data: {
@@ -76,7 +79,7 @@ var app = new Vue({
     list: []
   },
   created() {
-  		this.loadData();
+		this.loadData();
   },
   methods: {
   	loadData(){
@@ -84,18 +87,26 @@ var app = new Vue({
   		let url = 'http://gank.io/api/data/休息视频/10/1';
   		axios.get(url)
   			.then(result=>{
-  				if(result.status !=200) {alert(result.errMsg);return;}
+  				if(result.status != 200) {
+						alert(result.errMsg);
+						return;
+					}
+				  
   				viedios = result.data.results;
   				return axios.get('http://gank.io/api/data/福利/10/1');
   			})
   			.then(result=>{
-  				if(result.status !=200) {alert(result.errMsg);return;}
-  				 viedios.forEach((currentValue, index, arr) => {
-	            currentValue.imageUrl = result.data.results[index].url;
-	            currentValue.desc = currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-") + 1, 5) 
-	                                + currentValue.desc;
-	          });
-	          this.list = viedios;
+  				if(result.status != 200) {
+						alert(result.errMsg);
+						return;
+					}
+  				//将休息视频描述信息和福利的图片集合在一起 形成妹纸数据 
+					viedios.forEach((currentValue, index, arr) => {
+						currentValue.imageUrl = result.data.results[index].url;
+						currentValue.desc = currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-") + 1, 5) 
+																+ currentValue.desc;
+					});
+					this.list = viedios;
   			})
   	}
   }
