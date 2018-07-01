@@ -21,9 +21,14 @@
     <img src="/reactNative/images/detail.png" width="250">
 </div>
 
-## h5(vue)
+## h5(vue-CDN)
 <div style="display:flex;">
-    <img src="/vue/images/home.png" width="250">
+    <img src="/reactNative/images/home.png" width="250">
+</div>
+
+## h5(react-CDN)
+<div style="display:flex;">
+    <img src="/reactNative/images/home.png" width="250">
 </div>
 
 ## 关于我

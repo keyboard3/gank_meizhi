@@ -39,7 +39,7 @@ body{
 	padding: 0px 2.5vw;
 	margin-top: 50px;
 }
-image {
+img {
 	width: 45vw;
 }
 .title {
@@ -61,10 +61,10 @@ image {
 <div id="app" v-lock>
   <div class="header horizontal-layout">{{title}}</div>
   <div class="horizontal-layout container">
-			<div class="vertical-layout box" v-for="(item,index) in list" :key="item.id">
-  		<img :src="item.imageUrl">
-  		<div class="title">{{item.desc}}</div>
-  	</div>
+			<div class="vertical-layout box" v-for="(item,index) in list" :key="item._id">
+				<img :src="item.imageUrl">
+				<div class="title">{{item.desc}}</div>
+  		</div>
   </div>
 </div>
 </body>
