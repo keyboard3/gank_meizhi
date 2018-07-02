@@ -25,24 +25,22 @@ export default {
 		this.loadData();
   },
   methods: {
-    loadData() {
-      let videosRequest = axios.get('http://gank.io/api/data/休息视频/10/1');
+    async loadData() {
+			let videosRequest = axios.get('http://gank.io/api/data/休息视频/10/1');
       let welfaresRequest = axios.get('http://gank.io/api/data/福利/10/1');
+			let [videosResult, welfaresResult] = await Promise.all([videosRequest, welfaresRequest]);
 
-      axios.all([videosRequest, welfaresRequest])
-        .then(axios.spread((videosResult, welfaresResult) => {
-          let videos = videosResult.data.results;
-          let welfares = welfaresResult.data.results;
-          
-					videos.forEach((currentValue, index) => {
-						currentValue.imageUrl = welfares[index].url;
-						currentValue.desc = currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-") + 1, 5) 
-																+ currentValue.desc;
-					});
-					this.list = videos;
-        }));
-      },
+			let videos = videosResult.data.results;
+			let welfares = welfaresResult.data.results;
+			
+			videos.forEach((currentValue, index) => {
+				currentValue.imageUrl = welfares[index].url;
+				currentValue.desc = currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-") + 1, 5) 
+														+ currentValue.desc;
+			});
+			this.list = videos;
     }
+  }
 }
 </script>
 
