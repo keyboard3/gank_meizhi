@@ -1,6 +1,10 @@
+/**
+ * @file 首页
+ * @author keyboard3
+ */
+
 import React, { Component } from 'react';
 import {
-	Platform,
 	StyleSheet,
 	Text,
 	Image,
@@ -10,9 +14,11 @@ import {
 	View
 } from 'react-native';
 import Dimensions from 'Dimensions';
+import axios from 'axios';
 
 type Props = {};
 export default class App extends Component<Props> {
+
 	static navigationOptions = {
 		title: '妹纸&gank.io'
 	} 
@@ -39,22 +45,17 @@ export default class App extends Component<Props> {
 						<TouchableWithoutFeedback
 							onPress = {() => this.setState({modalVisible:false}) }
 						>
-								<Image style = {{
-										width: Dimensions.get('window').width,
-										height: Dimensions.get('window').height,
-										backgroundColor: 'black',
-										resizeMode: Image.resizeMode.contain
-									}}
-									source = {{ uri: this.state.bigImage }}
+								<Image style={styles.bigMeitu}
+									source={{ uri: this.state.bigImage }}
 								>
 							</Image>
 						</TouchableWithoutFeedback>
 				</Modal>
 				<FlatList
-					style = {{marginLeft: 5,marginRight: 5}}
+					style={{marginLeft: 5,marginRight: 5}}
 					data = {this.state.results}
 					numColumns = {2}
-					keyExtractor = {(item) => item.desc}
+					keyExtractor = {item=> item._id}
 					refreshing = {false}
 					onRefresh = {() => {
 						this.setState({ currentPage:1 });
@@ -62,96 +63,95 @@ export default class App extends Component<Props> {
 					}}
 					onEndReachedThreshold = {0}
 					onEndReached = {(distanceFromEnd) => this.getData(this.state.currentPage + 1)}
-					renderItem = {this.listItem}
+					renderItem = {this.renderListItem}
 				/>
 			</View>
 		);
 	}
-	async getData(page) {
-					this.setState({ refreshing: true });
-					let results = [];
 
-					let url = 'http://gank.io/api/data/休息视频/10/' + page;
-					await 
-						fetch(url)
-						.then(response => response.json())
-						.then(responseJson => results = responseJson.results))
-						.catch(error => this.setState({ refreshing: false }));
-						
-					url = 'http://gank.io/api/data/福利/10/' + page;
-					await 
-						fetch(url)
-						.then(response => response.json())
-						.then(responseJson => {
-							results.forEach((currentValue, index, arr) => {
-									currentValue.imageUrl = responseJson.results[index].url;
-									currentValue.desc = currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-") + 1, 5) + currentValue.desc;
-							});
-							if (page > 1){
-								this.setState({ results: this.state.results.concat(results)});
-							}else {
-								this.setState({ results: results });
-							}
-							console.log('state.results', this.state.results);
-						})
-						.catch(error => console.log('error', error))
-						.then(() => this.setState({ refreshing: false }));
-    		}
-	listItem(item) {
-			return (
-				<View style = {{
-					marginLeft: 5,
-					marginTop: 5,
-					marginRight: 5,
-					flexDirection: 'column', 
-					backgroundColor: 'white', 
-					borderWidth: 1, 
-					borderRadius: 4,
-					borderColor: '#CECECE' }}
+	renderListItem(data) {
+		let item = data.item;
+		return (
+			<View style={styles.listItem}
+			>
+				<TouchableWithoutFeedback
+					onPress = {() => this.setState({ bigImage: item.imageUrl, modalVisible: true }) }
 				>
-					<TouchableWithoutFeedback
-						onPress = {() => this.setState({ bigImage: item.imageUrl, modalVisible: true }) }}
-					>
-							<Image style = {{
-								width: Dimensions.get('window').width / 2 - 10,
-								height: 250,
-								borderRadius: 4,
-								resizeMode: Image.resizeMode.cover}}
-								source = {{ uri: item.imageUrl }}
-							/>
-					</TouchableWithoutFeedback>
-					<Text onPress = {() => {
-						let date = item.publishedAt.substring(0, 10).replace(/-/g, '/');
-						let url = `http://gank.io/${date}`;
-						this.props.navigation.navigate("Detail", { url: url, title: date });
-						}}
-						style = {{
-							width: Dimensions.get('window').width / 2 - 20,
-							margin:5,
-						}}
-					>
-						{item.desc}
-					</Text>
-				</View>
-			);
+						<Image style={styles.meitu}
+							source={{ uri: item.imageUrl }}
+						/>
+				</TouchableWithoutFeedback>
+
+				<Text onPress = {() => this.navigateDetail(item)}
+					style={styles.desc}
+				>
+					{item.desc}
+				</Text>
+			</View>
+		);
+	}
+
+	async getData(page) {
+		this.setState({ refreshing: true });
+		let results = [];
+		
+		try {
+			let videosRequest = axios.get('http://gank.io/api/data/休息视频/10/'+page);
+			let welfaresRequest = axios.get('http://gank.io/api/data/福利/10/'+page);
+			let [videosResult, welfaresResult] = await Promise.all([videosRequest, welfaresRequest]);
+			this.setState({ refreshing: false });
+
+			let videos = videosResult.data.results;
+			let welfares = welfaresResult.data.results;
+			
+			videos.forEach((currentValue, index) => {
+				currentValue.imageUrl = welfares[index].url;
+				currentValue.desc = currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-") + 1, 5) 
+														+ currentValue.desc;
+			});
+			results = videos;
+			if (page > 1){
+				this.setState({ results: this.state.results.concat(results)});
+			}else {
+				this.setState({ results: results });
+			} 
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+	navigateDetail(item) {
+		let date = item.publishedAt.substring(0, 10).replace(/-/g, '/');
+		let url = `http://gank.io/${date}`;
+		this.props.navigation.navigate("Detail", { url: url, title: date });
 	}
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#F5FCFF',
+	listItem: {
+		marginLeft: 5,
+		marginTop: 5,
+		marginRight: 5,
+		flexDirection: 'column', 
+		backgroundColor: 'white', 
+		borderWidth: 1, 
+		borderRadius: 4,
+		borderColor: '#CECECE'
 	},
-	welcome: {
-		fontSize: 20,
-		textAlign: 'center',
-		margin: 10,
+	meitu: {
+		width: Dimensions.get('window').width / 2 - 10,
+		height: 250,
+		borderRadius: 4,
+		resizeMode: Image.resizeMode.cover
 	},
-	instructions: {
-		textAlign: 'center',
-		color: '#333333',
-		marginBottom: 5,
+	bigMeitu: {
+		width: Dimensions.get('window').width,
+		height: Dimensions.get('window').height,
+		backgroundColor: 'black',
+		resizeMode: Image.resizeMode.contain
 	},
+	desc: {
+		width: Dimensions.get('window').width / 2 - 20,
+		margin:5
+	}
 });
