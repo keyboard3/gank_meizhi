@@ -21,7 +21,9 @@
 
 <template>
 <view style="position:relative;">
-  <image style="position:absolute;width:100vw;height:100vh;background:black;z-index:10;" @tap="hideImage" mode="aspectFit" wx:if="{{show}}" src="{{bigUrl}}"></image>
+  <image 
+    style="position:absolute;width:100vw;height:100vh;background:black;z-index:10;" 
+    @tap="hideImage" mode="aspectFit" wx:if="{{show}}" src="{{bigUrl}}"></image>
   <view class="container" wx:else >
     <view style="flex:1;">
       <repeat for="{{results}}" key="index" index="index" item="item">
@@ -103,39 +105,37 @@
     async getData(page,callback) {
       if (this.loadEnd == 1) return;
 
-      this.loadEnd = 1;
-      let results = [];
+      try {
+        this.loadEnd = 1;
+        let results = [];
 
-      let url='http://gank.io/api/data/休息视频/10/' + page;
-      await 
-      wepy.request(url1)
-          .then((result) => {
-            if (result.statusCode != 200) {wx.showToast({title:result.errMsg,icon:'none'});return;}
-            results = result.data.results;
-          })
-          .then(()=> if (callback!=null) callback.call(););
+        let videosRequest = wepy.request('http://gank.io/api/data/休息视频/10/' + page);
+        let welfaresRequest = wepy.request('http://gank.io/api/data/福利/10/' + page);
+        let [videosResult, welfaresResult] = await Promise.all([videosRequest, welfaresRequest]);
+        let videos = videosResult.data.results;
+        let welfares = welfaresResult.data.results;
 
-      url='http://gank.io/api/data/福利/10/' + page;
-      await 
-      wepy.request(url2)
-          .then((result) => {
-            if (result.statusCode != 200) {wx.showToast({  title:result.errMsg, icon:'none'  });return;}
+        videos.forEach((currentValue, index) => {
+          currentValue.imageUrl = welfares[index].url;
+          currentValue.desc = currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-") + 1, 5) 
+                              + currentValue.desc;
+        });
+        results = videos;
 
-            results.forEach((currentValue, index, arr) => {
-              currentValue.imageUrl = result.data.results[index].url;
-              currentValue.desc = currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-") + 1, 5) 
-                                  + currentValue.desc;
-            });
-            if (this.results.length != 0 && page != 1) {
-              currentPage++;
-              this.results = this.results.concat(results);
-            }else this.results = results;
-          })
-          .then(() => {
-            this.loadEnd = 0;
-            if (callback != null) callback.call();
-            this.$apply();
-          });
+        if (this.results.length != 0 && page != 1) {
+          currentPage++;
+          this.results = this.results.concat(results);
+        } else {
+          this.results = results;
+        }
+
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.loadEnd = 0;
+        if (callback != null) callback.call();
+        this.$apply();
+      }
     }
   }
 </script>

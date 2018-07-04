@@ -11,7 +11,7 @@
     <img src="/weixin/images/detail.png" width="250">
 </div>
 
-## 微信小程序
+## 微信小程序(wepy)
 ## ReactNative
 ## h5(vue-CDN, vue)
 ## h5(react-CDN, react)
@@ -24,6 +24,8 @@
  - Android
  - iOS
  - Coffee/Type
+ - auglar
+ - zepto
 ...
 
 ## 关于我

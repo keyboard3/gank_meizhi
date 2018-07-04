@@ -75,32 +75,21 @@ render(data);
 loadData();
 
 function loadData(){
-  let viedios;
-  let url = 'http://gank.io/api/data/休息视频/10/1';
-  axios.get(url)
-    .then(result=>{
-      if(result.status != 200) {
-        alert(result.errMsg);
-        return;
-      }
-      
-      viedios = result.data.results;
-      return axios.get('http://gank.io/api/data/福利/10/1');
-    })
-    .then(result=>{
-      if(result.status != 200) {
-        alert(result.errMsg);
-        return;
-      }
-      //将休息视频描述信息和福利的图片集合在一起 形成妹纸数据 
-      viedios.forEach((currentValue, index, arr) => {
-        currentValue.imageUrl = result.data.results[index].url;
-        currentValue.desc = currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-") + 1, 5) 
-                            + currentValue.desc;
+  let videosRequest = axios.get('http://gank.io/api/data/休息视频/10/'+1);
+  let welfaresRequest = axios.get('http://gank.io/api/data/福利/10/'+1);
+  axios.all([videosRequest, welfaresRequest])
+    .then(axios.spread((videosResult, welfaresResult) => {
+      let videos = videosResult.data.results;
+			let welfares = welfaresResult.data.results;
+			
+			videos.forEach((currentValue, index) => {
+				currentValue.imageUrl = welfares[index].url;
+				currentValue.desc = currentValue.publishedAt.substr(currentValue.publishedAt.indexOf("-") + 1, 5) 
+														+ currentValue.desc;
       });
-      data.list = viedios;
+      data.list = videos;
       render(data);
-    })
+    }));
 }
 
 function render(data){
